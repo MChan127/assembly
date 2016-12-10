@@ -13,6 +13,8 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 
+use app\models\Board;
+
 /**
  * Site controller
  */
@@ -72,7 +74,23 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $user = Yii::$app->user;
+        if (!$user) {
+            return $this->render('index', [
+                'user' => null
+            ]);
+        } else {
+            // get boards that the user is associated with
+            $boards = Board::find()
+                ->join('INNER JOIN', 'board_user', 'board.id = board_user.board_id')
+                ->where(['board_user.user_id' => $user->id])
+                ->all();
+
+            return $this->render('index', [
+                'user' => $user,
+                'boards' => $boards
+            ]);
+        }
     }
 
     /**

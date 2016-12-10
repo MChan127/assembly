@@ -12,6 +12,7 @@ use common\models\User;
  * @property string $name
  * @property integer $admin_id
  * @property string $created_at
+ * @property string $updated_at
  *
  * @property User $admin
  * @property BoardUser[] $boardUsers
@@ -34,9 +35,9 @@ class Board extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'admin_id', 'created_at'], 'required'],
+            [['name', 'admin_id'], 'required'],
             [['admin_id'], 'integer'],
-            [['created_at'], 'safe'],
+            [['created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['admin_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['admin_id' => 'id']],
         ];
@@ -52,6 +53,7 @@ class Board extends \yii\db\ActiveRecord
             'name' => 'Name',
             'admin_id' => 'Admin ID',
             'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 

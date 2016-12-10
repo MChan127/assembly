@@ -12,8 +12,8 @@ use common\models\User;
  * @property integer $user_id
  * @property integer $board_id
  *
- * @property User $user
  * @property Board $board
+ * @property User $user
  */
 class BoardUser extends \yii\db\ActiveRecord
 {
@@ -33,8 +33,8 @@ class BoardUser extends \yii\db\ActiveRecord
         return [
             [['user_id', 'board_id'], 'required'],
             [['user_id', 'board_id'], 'integer'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['board_id'], 'exist', 'skipOnError' => true, 'targetClass' => Board::className(), 'targetAttribute' => ['board_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -53,16 +53,16 @@ class BoardUser extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getBoard()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(Board::className(), ['id' => 'board_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBoard()
+    public function getUser()
     {
-        return $this->hasOne(Board::className(), ['id' => 'board_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }

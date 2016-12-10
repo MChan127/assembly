@@ -3,55 +3,22 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\Board;
-use app\models\BoardSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
-/**
- * BoardController implements the CRUD actions for Board model.
- */
+use app\models\Board;
+use app\models\BoardUser;
+
 class BoardController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Lists all Board models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new BoardSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
     /**
      * Displays a single Board model.
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionIndex($id)
     {
-        return $this->render('view', [
+        return $this->render('index', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -64,46 +31,34 @@ class BoardController extends Controller
     public function actionCreate()
     {
         $model = new Board();
+        $post = Yii::$app->request->post();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        //if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if (!empty($post['Board'])) {
+            $post = $post['Board'];
+            $model->name = $post['name'];
+            if (empty($post['admin_id'])) {
+                $model->admin_id = Yii::$app->user->id;
+            } else {
+                $model->admin_id = $post['admin_id'];
+            }
+            $model->save();
+
+            // create the user-board relationship model
+            $board_user = new BoardUser();
+            $board_user->board_id = $model->id;
+            $board_user->user_id = Yii::$app->user->id;
+            $board_user->save();
+
+            // check if this is an admin user
+            //if (strcasecmp(key(Yii::$app->authmanager->getRoles(Yii::$app->user->id)), 'admin') === 0) {
+                return $this->redirect(['index', 'id' => $model->id]);
+            //}
         } else {
             return $this->render('create', [
                 'model' => $model,
             ]);
         }
-    }
-
-    /**
-     * Updates an existing Board model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing Board model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
     }
 
     /**

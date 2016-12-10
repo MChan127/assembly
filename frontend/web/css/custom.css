@@ -1,0 +1,17 @@
+.board-card {
+    min-height: 75px;
+    padding: 10px;
+    margin: 0 0 20px 0;
+    cursor: pointer;
+}
+.board-card:hover {
+    background-color: #FCFCFC;
+
+    -webkit-transition: all 0.08s;
+    transition: all 0.08s;
+}
+
+.card .timestamps {
+    font-size: 12px;
+    color: #5D5D5D;
+}

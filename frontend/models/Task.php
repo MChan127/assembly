@@ -13,10 +13,12 @@ use common\models\User;
  * @property integer $author_id
  * @property integer $board_id
  * @property integer $position
+ * @property string $created_at
+ * @property string $updated_at
  *
  * @property Post[] $posts
- * @property User $author
  * @property Board $board
+ * @property User $author
  */
 class Task extends \yii\db\ActiveRecord
 {
@@ -34,11 +36,12 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'author_id', 'board_id'], 'required'],
+            [['name', 'author_id', 'board_id', 'position'], 'required'],
             [['author_id', 'board_id', 'position'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 255],
-            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
             [['board_id'], 'exist', 'skipOnError' => true, 'targetClass' => Board::className(), 'targetAttribute' => ['board_id' => 'id']],
+            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
         ];
     }
 
@@ -53,6 +56,8 @@ class Task extends \yii\db\ActiveRecord
             'author_id' => 'Author ID',
             'board_id' => 'Board ID',
             'position' => 'Position',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 
@@ -67,16 +72,16 @@ class Task extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAuthor()
+    public function getBoard()
     {
-        return $this->hasOne(User::className(), ['id' => 'author_id']);
+        return $this->hasOne(Board::className(), ['id' => 'board_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBoard()
+    public function getAuthor()
     {
-        return $this->hasOne(Board::className(), ['id' => 'board_id']);
+        return $this->hasOne(User::className(), ['id' => 'author_id']);
     }
 }

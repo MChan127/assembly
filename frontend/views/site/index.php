@@ -2,52 +2,39 @@
 
 /* @var $this yii\web\View */
 
+use frontend\widgets\Board as BoardCard;
+use yii\helpers\Url;
+
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
-
+<?php 
+    // if logged in, display the boards that the user is involved in
+    // otherwise, display the welcome message informing that the user should log in or create an account
+    if ($user->isGuest): 
+?>
     <div class="jumbotron">
-        <h1>Congratulations!</h1>
+        <h1>Welcome</h1>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+        <p class="lead">To start using Assembly, please log in or create a new account.</p>
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+        <p>
+        <a class="btn btn-lg btn-success" href="<?= Url::to(['site/login']); ?>">Login</a>
+        <a class="btn btn-lg btn-primary" href="<?= Url::to(['site/signup']); ?>">Sign Up</a>
+        </p>
+    </div>
+<?php else: ?>
+    
+    <p>
+        <a class="btn btn-medium btn-primary" href="<?= Url::to(['board/create']); ?>">Create New Board</a>
+    </p>
+    
+    <div class="row">
+        <?php foreach ($boards as $board): ?>
+            <p><?= BoardCard::widget(['item' => $board]) ?></p>
+        <?php endforeach; ?>
     </div>
 
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
+<?php endif; ?>
     </div>
 </div>
