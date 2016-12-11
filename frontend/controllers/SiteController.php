@@ -81,10 +81,7 @@ class SiteController extends Controller
             ]);
         } else {
             // get boards that the user is associated with
-            $boards = Board::find()
-                ->join('INNER JOIN', 'board_user', 'board.id = board_user.board_id')
-                ->where(['board_user.user_id' => $user->id])
-                ->all();
+            $boards = Board::getUserBoards($user->id);
 
             return $this->render('index', [
                 'boards' => $boards

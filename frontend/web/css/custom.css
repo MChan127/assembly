@@ -21,3 +21,58 @@
 	float: left;
 	margin-right: 20px;
 }
+
+#manageUsersModal .row:first-child {
+	margin-left: 15px;
+	margin-right: 15px;
+	margin-bottom: 15px;
+}
+
+.manage-user-list {
+	padding: 5px;
+	margin: 0 0 0 10px;
+	height: 300px;
+	overflow: auto;
+	border-radius: 2px;
+}
+
+.manage-user-item {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 99%;
+	padding: 3px 8px;
+	cursor: pointer;
+}
+.manage-user-item:hover {
+	background-color: #FCFCFC;
+
+    -webkit-transition: all 0.1s;
+    transition: all 0.1s;
+
+    border-color: #3590FF;
+}
+.manage-user-item.selected {
+	background-color: #BCDEFF;
+	border-color: #414141;
+}
+
+@media only screen and (min-width: 768px) {
+	.manage-user-edit {
+		margin-right: -10px;
+		padding-right: 20px;
+	}
+}
+@media only screen and (max-width: 767px) {
+	.manage-user-list {
+		margin-right: 10px;
+	}
+	.manage-user-edit {
+		margin-top: 10px;
+	}
+}
+
+table.user-info-table td:first-child {
+	width: 20%;
+	background-color: #F6F6F6;
+}

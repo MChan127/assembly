@@ -88,4 +88,12 @@ class Board extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Task::className(), ['board_id' => 'id']);
     }
+
+    // get list of boards in which the given user id is a member of
+    public function getUserBoards($id) {
+        return Board::find()
+            ->join('INNER JOIN', 'board_user', 'board.id = board_user.board_id')
+            ->where(['board_user.user_id' => $id])
+            ->all();
+    }
 }

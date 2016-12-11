@@ -1,6 +1,6 @@
 <?php
 
-namespace yii\helpers;
+namespace common\helpers;
 
 use Yii;
 

@@ -3,7 +3,7 @@ namespace common\rules;
 
 use yii\rbac\Rule;
 use common\models\User;
-use yii\helpers\User as UserHelper;
+use common\helpers\User as UserHelper;
 
 /**
  * Checks if a board/task/post belongs to a user
@@ -21,8 +21,8 @@ class AuthorRule extends Rule
     public function execute($user, $item, $params)
     {
         if (!isset($params['type']))
-            return false;
-
+            $params['type'] = 0;
+        
         switch($params['type']) {
             case 'board':
                 return isset($params['item']) ? $params['item']->admin_id == $user : false || 
@@ -32,7 +32,7 @@ class AuthorRule extends Rule
                 return isset($params['item']) ? $params['item']->author_id == $user : false || 
                     in_array('admin', UserHelper::getUserRoles($user));
             default:
-                return false;
+                return in_array('admin', UserHelper::getUserRoles($user));
         }
     }
 }

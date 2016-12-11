@@ -3,7 +3,7 @@ namespace common\rules;
 
 use yii\rbac\Rule;
 use common\models\User;
-use yii\helpers\User as UserHelper;
+use common\helpers\User as UserHelper;
 use app\models\BoardUser;
 
 /**
@@ -21,12 +21,12 @@ class MemberRule extends Rule
      */
     public function execute($user, $item, $params)
     {
-        if (!isset($params['board']))
-            return false;
-
         if (in_array('admin', UserHelper::getUserRoles($user))) {
             return true;
         }
+        
+        if (!isset($params['board']))
+            return false;
 
         $check = BoardUser::find()
             ->where(['board_id' => $params['board'], 'user_id' => $user])

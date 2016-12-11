@@ -11,6 +11,7 @@ use common\models\User;
  * @property integer $id
  * @property integer $user_id
  * @property integer $board_id
+ * @property string $joined_at
  *
  * @property Board $board
  * @property User $user
@@ -33,6 +34,7 @@ class BoardUser extends \yii\db\ActiveRecord
         return [
             [['user_id', 'board_id'], 'required'],
             [['user_id', 'board_id'], 'integer'],
+            [['joined_at'], 'safe'],
             [['board_id'], 'exist', 'skipOnError' => true, 'targetClass' => Board::className(), 'targetAttribute' => ['board_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -47,6 +49,7 @@ class BoardUser extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'board_id' => 'Board ID',
+            'joined_at' => 'Joined At',
         ];
     }
 
@@ -64,5 +67,14 @@ class BoardUser extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    // get list of users and their information given a board id
+    public function getBoardUsers($id) {
+        return User::find()
+            ->select(['"user".id', 'username', 'email'])
+            ->join('INNER JOIN', 'board_user', '"user".id = board_user.user_id')
+            ->where(['board_user.board_id' => $id])
+            ->all();
     }
 }

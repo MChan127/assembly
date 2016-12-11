@@ -1,0 +1,36 @@
+<div class="row">
+	<div class="input-group col-md-12">
+		<input type="email" class="form-control" placeholder="User email address">
+		<span class="input-group-btn">
+			<button class="btn btn-success" type="button">Add New User</button>
+		</span>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-3 manage-user-list well well-lg">
+		<div class="panel panel-default manage-user-item" ng-repeat="user in userData track by user.id"
+			alt="{{user.username}} ({{user.email}})" title="{{user.username}} ({{user.email}})"
+			data-id="{{user.id}}">
+			{{user.username}} ({{user.email}})
+		</div>
+	</div>
+
+	<div class="col-md-9 manage-user-edit">
+		<div ng-if="selectedUser.id !== null">
+			<table class="table table-condensed table-responsive table-bordered user-info-table">
+				<tr>
+					<td>Name</td>
+					<td>{{selectedUser.name}}</td>
+				</tr>
+				<tr>
+					<td>E-mail Address</td>
+					<td>{{selectedUser.email}}</td>
+				</tr>
+			</table>
+
+			<p>
+				<a class="btn btn-warning">Remove User from Board</a>
+			</p>
+		</div>
+	</div>
+</div>

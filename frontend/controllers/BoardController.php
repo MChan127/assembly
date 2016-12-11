@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 
 use app\models\Board;
 use app\models\BoardUser;
@@ -12,14 +13,55 @@ use app\models\BoardUser;
 class BoardController extends Controller
 {
     /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create', 'index'],
+                'rules' => [
+                    [
+                        'actions' => ['create', 'index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
      * Displays a single Board model.
      * @param integer $id
      * @return mixed
      */
     public function actionIndex($id)
     {
+        $board = $this->findModel($id);
+        if (!Yii::$app->user->can('manageBoards', ['type' => 'board', 'item' => $board]) &&
+            !Yii::$app->user->can('createCard', ['type' => 'board', 'item' => $board]))
+            throw new CHttpException(403, 'You do not have permission to access this page.');
+
+        // get list of users and their information for this board
+        $userData = array();
+        $users = BoardUser::getBoardUsers($board->id);
+        foreach ($users as $user) {
+            //echo '<pre>'; print_r($user); echo '</pre>';
+
+            $userData[$user->id] = $user->toArray() + array(
+                'isAdmin' => $user->id === $board->admin_id
+            );
+
+            // remove sensitive data
+            // ...
+        }
+        //echo '<pre>'; print_r($userData); echo '</pre>'; die;
+
         return $this->render('index', [
-            'model' => $this->findModel($id),
+            'board' => $board,
+            'userData' => $userData,
         ]);
     }
 
