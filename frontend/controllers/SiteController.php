@@ -87,7 +87,6 @@ class SiteController extends Controller
                 ->all();
 
             return $this->render('index', [
-                'user' => $user,
                 'boards' => $boards
             ]);
         }

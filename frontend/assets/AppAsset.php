@@ -19,18 +19,5 @@ class AppAsset extends \yii\web\AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
-        'yii\angular\AngularAsset',
     ];
 }
-
-namespace yii\angular;
-
-/**
- * Create asset bundle to import AngularJS
- */
-class AngularAsset extends \yii\web\AssetBundle {
-    public $sourcePath = '@bower/angular';
-    public $js = [
-        'angular.min.js',
-    ];
-} 

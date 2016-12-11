@@ -6,6 +6,8 @@ use frontend\widgets\Board as BoardCard;
 use yii\helpers\Url;
 
 $this->title = 'Assembly - A simple project management webapp';
+
+$user = Yii::$app->user;
 ?>
 <div class="site-index">
 <?php 

@@ -20,7 +20,10 @@ class AuthorRule extends Rule
      */
     public function execute($user, $item, $params)
     {
-        switch($type) {
+        if (!isset($params['type']))
+            return false;
+
+        switch($params['type']) {
             case 'board':
                 return isset($params['item']) ? $params['item']->admin_id == $user : false || 
                     in_array('admin', UserHelper::getUserRoles($user));
@@ -31,7 +34,5 @@ class AuthorRule extends Rule
             default:
                 return false;
         }
-
-        return isset($params['post']) ? $params['post']->createdBy == $user : false;
     }
 }

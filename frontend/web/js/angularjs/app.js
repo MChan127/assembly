@@ -1,0 +1,1 @@
+var assemblyApp = angular.module('assemblyApp', []);

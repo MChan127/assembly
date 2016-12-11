@@ -1,8 +1,10 @@
 <?php
 use yii\helpers\Html;
+use frontend\assets\AngularAsset;
+
+AngularAsset::register($this);
 
 $this->title = 'Assembly - ' . Html::encode($model->name);
-
 echo $this->render('nav', ['model' => $model]);
 ?>
 
