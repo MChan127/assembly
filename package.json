@@ -1,0 +1,19 @@
+{
+  "name": "assembly",
+  "version": "1.0.0",
+  "description": "Yii 2 Advanced Project Template ===============================",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MChan127/assembly.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MChan127/assembly/issues"
+  },
+  "homepage": "https://github.com/MChan127/assembly#readme",
+  "dependencies": {}
+}

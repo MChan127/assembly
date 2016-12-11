@@ -52,7 +52,7 @@ class BoardController extends Controller
 
             // check if this is an admin user
             //if (strcasecmp(key(Yii::$app->authmanager->getRoles(Yii::$app->user->id)), 'admin') === 0) {
-                return $this->redirect(['index', 'id' => $model->id]);
+            return $this->redirect(['index', 'id' => $model->id]);
             //}
         } else {
             return $this->render('create', [

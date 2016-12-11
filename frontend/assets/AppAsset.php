@@ -2,12 +2,10 @@
 
 namespace frontend\assets;
 
-use yii\web\AssetBundle;
-
 /**
  * Main frontend application asset bundle.
  */
-class AppAsset extends AssetBundle
+class AppAsset extends \yii\web\AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
@@ -21,5 +19,18 @@ class AppAsset extends AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
+        'yii\angular\AngularAsset',
     ];
 }
+
+namespace yii\angular;
+
+/**
+ * Create asset bundle to import AngularJS
+ */
+class AngularAsset extends \yii\web\AssetBundle {
+    public $sourcePath = '@bower/angular';
+    public $js = [
+        'angular.min.js',
+    ];
+} 

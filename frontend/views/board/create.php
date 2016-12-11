@@ -6,13 +6,13 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model common\models\Board */
 
-$this->title = Yii::t('app', 'Create Board');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Boards'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Assembly - ' . Yii::t('app', 'Create New Board');
+//$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Boards'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = Yii::t('app', 'Create New Board');
 ?>
 <div class="board-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode(Yii::t('app', 'Create New Board')) ?></h1>
 
     <?php $form = ActiveForm::begin(); ?>
 
