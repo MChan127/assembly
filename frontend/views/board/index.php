@@ -5,13 +5,17 @@ use frontend\assets\AngularAsset;
 
 AngularAsset::register($this);
 
-$this->title = 'Assembly - ' . Html::encode($board->name);
+$this->title = 'Assembly Board';
 ?>
 
-<div class="board-app" ng-app="boardApp">
+<div class="board-app" ng-app="boardApp" ng-controller="BoardController">
 	<?= $this->render('nav', ['board' => $board]); ?>
 
 	<div class="row">
+		<div class="col-md-12">
+			<a class="btn btn-primary" id="createNewTask" data-toggle="modal" href="#createTaskModal">Create New Task</a>
+		</div>
+
 		<div class="col-md-8 board-tasks">
 			<?php // use angular js to populate the list of tasks */ ?>
 		</div>
@@ -43,6 +47,7 @@ socket.on('connect', function () {
 });
 
 this_board_id = <?= $board->id ?>;
+this_board_name  = "<?= Html::encode($board->name) ?>";
 userData = <?= json_encode($userData) ?>;
 <?php 
 	$templateUrl = Yii::$app->getUrlManager()->getBaseUrl() . '/js/angularjs/templates/';

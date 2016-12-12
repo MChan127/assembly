@@ -1,5 +1,6 @@
 var psql = require('../db_connect').dbquery;
 var helper = require('../helper');
+var moment = require('moment');
 
 var listen = function(io, socket, clientList, socketIdList) {
     var socket_id = socket.id;
@@ -22,6 +23,7 @@ var listen = function(io, socket, clientList, socketIdList) {
                 if (result) {
                     if (result.rows.length > 0) {
                         joined_at = result.rows[0].joined_at;
+                        joined_at = moment(joined_at, 'YYYY-MM-DD').format('MMM D YYYY');
                     }
                 }
                 // notify the admin who added this user
@@ -57,7 +59,7 @@ var listen = function(io, socket, clientList, socketIdList) {
                     username: username,
                     email: added_user.email,
                     joined_at: joined_at
-                }, board_id);
+                });
 
                 // update list objects
                 if (added_usr_socket_ids.length > 0) {
@@ -114,7 +116,7 @@ var listen = function(io, socket, clientList, socketIdList) {
             // notify all the users of this board
             // should create a type of events log, and transmit the event object to the front
             // ...
-            io.in(board_id).emit('broadcastRemovedFromBoard', removed_user_id, board_id);
+            io.in(board_id).emit('broadcastRemovedUserFromBoard', removed_user_id);
         });
     });
 };

@@ -87,3 +87,12 @@ table.user-info-table td:first-child {
 	width: 20%;
 	background-color: #F6F6F6;
 }
+
+.ng-cloak {
+	display: none;
+}
+
+#createNewTask {
+	position: relative;
+	top: -7px;
+}

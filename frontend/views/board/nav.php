@@ -13,7 +13,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"><?= Html::encode($board->name) ?></a>
+            <a class="navbar-brand ng-cloak" href="#">{{boardName}}</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->

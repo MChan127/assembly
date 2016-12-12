@@ -1,6 +1,35 @@
 (function(templateUrls) {
 	var boardApp = angular.module('boardApp', []);
 
+	boardApp.controller('BoardController', function($scope, $timeout) {
+		$scope.boardName = this_board_name;
+		$timeout();
+
+		$scope.saveEditBoard = function() {
+			var $nameInput = $('#editBoardModal').find('[name="name"]');
+			$nameInput.closest('.input-group').next('.input-error-msg').detach().remove();
+			$nameInput.removeClass('error');
+			if ($nameInput.val().trim().length < 1) {
+				$nameInput.addClass('error');
+				$newErrorMsg = $('<span class="input-error-msg">The board name is invalid.</span>');
+				$newErrorMsg.hide();
+				$nameInput.closest('.input-group').after($newErrorMsg);
+				$newErrorMsg.fadeIn(100);
+				return;
+			}
+
+			socket.emit('changeBoardName', $nameInput.val().trim(), this_board_id);
+		};
+
+		socket.on('doneChangeBoardName', function(newBoardName) {
+			$('#editBoardModal').modal('hide');
+		});
+		socket.on('broadcastChangedBoardName', function(newBoardName) {
+			$scope.boardName = newBoardName;
+			$scope.$apply();
+		});
+	});
+
 	boardApp.controller('ManageUsersController', function($scope) {
 		$scope.userData = userData;
 		$scope.selectedUser = {
@@ -90,6 +119,9 @@
 
 				// finished adding a new user
 				socket.on('doneAddNewUser', function(newUserData) {
+					alert('The new user has been successfully added!');
+				});
+				socket.on('broadcastAddedToBoard', function(newUserData) {
 					scope.userData[newUserData.id] = {
 						id: newUserData.id,
 						username: newUserData.username,
@@ -98,11 +130,12 @@
 						joined_at: newUserData.joined_at
 					};
 					$timeout();
-
-					alert('The new user has been successfully added!');
 				});
 				// finished removing user from this board
 				socket.on('doneRemoveUserFromBoard', function(removedUserId) {
+					alert('The user has been successfully removed from the board.');
+				});
+				socket.on('broadcastRemovedUserFromBoard', function(removedUserId) {
 					delete scope.userData[removedUserId];
 					scope.selectedUser = {
 						id: null, 
@@ -111,14 +144,13 @@
 						joined_at: null
 					};
 					$timeout();
-
-					alert('The user has been successfully removed from the board.');
-				});
-				// someone else added a new user
-				socket.on('newUserAdded', function() {
-					// ...
 				});
 			}
+		};
+	});
+	boardApp.controller('CreateTaskController', function($scope) {
+		$scope.saveCreateTask = function() {
+			var content = $('#createTaskModal').find('[name="description"]').val();
 		};
 	});
 })(angularTemplates);
