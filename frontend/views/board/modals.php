@@ -25,11 +25,7 @@
             </div>
             <div class="modal-body">
                 
-            <user-manager
-                user-data="userData"
-                selected-user="selectedUser"
-                reset-selected-user="resetSelectedUser"
-            ></user-manager>
+            <user-manager></user-manager>
 
             </div>
             <div class="modal-footer">

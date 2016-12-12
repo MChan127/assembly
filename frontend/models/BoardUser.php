@@ -71,10 +71,16 @@ class BoardUser extends \yii\db\ActiveRecord
 
     // get list of users and their information given a board id
     public function getBoardUsers($id) {
-        return User::find()
-            ->select(['"user".id', 'username', 'email'])
+        /*return User::find()
+            ->select(['"user".id', 'username', 'email', '"board_user".joined_at'])
             ->join('INNER JOIN', 'board_user', '"user".id = board_user.user_id')
             ->where(['board_user.board_id' => $id])
-            ->all();
+            ->all();*/
+
+        return Yii::$app->db->createCommand('SELECT "user".id, username, email, "board_user".joined_at FROM "user" 
+            INNER JOIN board_user ON "user".id = "board_user".user_id 
+            WHERE "board_user".board_id = :id;')
+            ->bindValues([':id' => $id])
+            ->queryAll();
     }
 }

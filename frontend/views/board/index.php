@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use frontend\assets\AngularAsset;
 
 AngularAsset::register($this);
@@ -23,8 +24,26 @@ $this->title = 'Assembly - ' . Html::encode($board->name);
 	<?= $this->render('modals', ['board' => $board]); ?>
 </div>
 
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script type="text/javascript">
-userData = <?php echo json_encode($userData) ?>;
+// initialize the socket which we'll use to communicate with the server
+var socket = io('http://localhost:3000');
+socket.on('connect', function () {
+	setTimeout(function() {
+	    $.ajax({
+	    	'type': 'POST',
+	    	'url': "<?= Url::to(['board/savesocketid']) ?>",
+	    	'data': {
+	    		'id': socket.id
+	    	}
+	    }).done(function(data) {
+	    	socket.emit('joinBoards');
+	    });
+	}, 1000);
+});
+
+this_board_id = <?= $board->id ?>;
+userData = <?= json_encode($userData) ?>;
 <?php 
 	$templateUrl = Yii::$app->getUrlManager()->getBaseUrl() . '/js/angularjs/templates/';
 ?>

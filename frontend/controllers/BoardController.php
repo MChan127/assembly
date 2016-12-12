@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\filters\AccessControl;
 
 use app\models\Board;
@@ -47,15 +48,13 @@ class BoardController extends Controller
         // get list of users and their information for this board
         $userData = array();
         $users = BoardUser::getBoardUsers($board->id);
-        foreach ($users as $user) {
+        for ($i = 0; $i < count($users); $i++) {
             //echo '<pre>'; print_r($user); echo '</pre>';
-
-            $userData[$user->id] = $user->toArray() + array(
-                'isAdmin' => $user->id === $board->admin_id
+            $user = $users[$i];
+            $userData[$user['id']] = $user + array(
+                'isAdmin' => $user['id'] === $board->admin_id
             );
-
-            // remove sensitive data
-            // ...
+            $userData[$user['id']]['joined_at'] = date('M j Y', strtotime($userData[$user['id']]['joined_at']));
         }
         //echo '<pre>'; print_r($userData); echo '</pre>'; die;
 
@@ -78,11 +77,19 @@ class BoardController extends Controller
         //if ($model->load(Yii::$app->request->post()) && $model->save()) {
         if (!empty($post['Board'])) {
             $post = $post['Board'];
-            $model->name = $post['name'];
+
+            // sanitize
+            $boardName = \yii\helpers\Html::encode($post['name']);
+
+            $model->name = $boardName;
             if (empty($post['admin_id'])) {
                 $model->admin_id = Yii::$app->user->id;
             } else {
-                $model->admin_id = $post['admin_id'];
+                $admin_id = $post['admin_id'];
+                if (preg_match('/^[0-9]+$/', $admin_id) === 0) {
+                    throw new ForbiddenHttpException;
+                }
+                $model->admin_id = $admin_id;
             }
             $model->save();
 
@@ -101,6 +108,19 @@ class BoardController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionSavesocketid() {
+        $id = Yii::$app->request->post('id');
+
+        if (!filter_var($id, FILTER_SANITIZE_SPECIAL_CHARS)) {
+            throw new ForbiddenHttpException;
+        }
+        Yii::$app->db->createCommand()->update('session', ['socketid' => $id], 'user_id = ' . Yii::$app->user->id)->execute();
+
+        return json_encode(array(
+            'status' => 'success'
+        ));
     }
 
     /**

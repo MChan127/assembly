@@ -1,3 +1,13 @@
+input.error {
+	border: 1px solid red;
+	background-color: #FFEEF1;
+}
+.input-error-msg {
+	display: block;
+	margin: 3px 0 0 5px;
+	color: #FF3737;
+}
+
 .board-card {
     min-height: 75px;
     margin: 0 0 20px 0;
@@ -42,6 +52,7 @@
 	text-overflow: ellipsis;
 	width: 99%;
 	padding: 3px 8px;
+	margin-bottom: 5px;
 	cursor: pointer;
 }
 .manage-user-item:hover {
